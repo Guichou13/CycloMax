@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Fabrication - ERP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .planning-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .capacity-bar-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+        .capacity-bar {
+            width: 100%;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+        .capacity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            transition: width 0.3s;
+        }
+        .capacity-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .week-planning {
+            margin: 30px 0;
+        }
+        .day-column {
+            display: inline-block;
+            width: calc(20% - 10px);
+            margin: 5px;
+            vertical-align: top;
+        }
+        .day-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border-radius: 8px 8px 0 0;
+            font-weight: 600;
+            text-align: center;
+        }
+        .day-content {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            min-height: 200px;
+            padding: 10px;
+        }
+        .production-item {
+            background: var(--light-bg);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            font-size: 13px;
+        }
+        .production-item.ligne-a {
+            border-left-color: #3b82f6;
+            background: #dbeafe;
+        }
+        .production-item.ligne-b {
+            border-left-color: #10b981;
+            background: #d1fae5;
+        }
+        .production-item.ligne-c {
+            border-left-color: #f59e0b;
+            background: #fef3c7;
+        }
+        .production-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        .production-item small {
+            color: var(--text-secondary);
+        }
+        .line-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+        .line-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .line-progress {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .line-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-building"></i>
+            <h2>Mon ERP</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="catalogue.html" class="nav-item">
+                <i class="fas fa-bicycle"></i>
+                <span>Catalogue Vélos</span>
+            </a>
+            <a href="stock.html" class="nav-item">
+                <i class="fas fa-boxes"></i>
+                <span>Stock Pièces</span>
+            </a>
+            <a href="production.html" class="nav-item active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Planning Fabrication</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-calendar-alt"></i> Planning de Fabrication</h1>
+                <p class="subtitle">Semaine du 4 au 8 Novembre 2025</p>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Planifier production
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>65</h3>
+                    <p>Vélos planifiés cette semaine</p>
+                    <span class="stat-change positive">92.8% capacité</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Lignes actives</p>
+                    <span class="stat-change positive">100%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>70</h3>
+                    <p>Capacité max hebdomadaire</p>
+                    <span class="stat-change positive">5 restants</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>42</h3>
+                    <p>Vélos complétés cette semaine</p>
+                    <span class="stat-change positive">64.6%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capacity Overview -->
+        <div class="planning-container">
+            <h2><i class="fas fa-chart-bar"></i> Capacité de production hebdomadaire</h2>
+            <div class="capacity-bar-container">
+                <div class="capacity-label">
+                    <span><strong>Utilisation:</strong> 65 vélos sur 70 max</span>
+                    <span><strong>92.8%</strong></span>
+                </div>
+                <div class="capacity-bar">
+                    <div class="capacity-fill" style="width: 92.8%;">
+                        65 / 70 vélos
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 25px;">
+                <div>
+                    <h4 style="color: #3b82f6; margin-bottom: 10px;"><i class="fas fa-circle"></i> Ligne A</h4>
+                    <p style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">25 vélos</p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">VTT Pro 26"</p>
+                </div>
+                <div>
+                    <h4 style="color: #10b981; margin-bottom: 10px;"><i class="fas fa-circle"></i> Ligne B</h4>
+                    <p style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">20 vélos</p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">Vélo Route Performance</p>
+                </div>
+                <div>
+                    <h4 style="color: #f59e0b; margin-bottom: 10px;"><i class="fas fa-circle"></i> Ligne C</h4>
+                    <p style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">20 vélos</p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">Vélo Urbain Confort</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Lines Status -->
+        <div class="section-header">
+            <h2>État des lignes de production</h2>
+            <p>Progression en temps réel</p>
+        </div>
+
+        <div class="planning-container">
+            <div class="line-card">
+                <div class="line-header">
+                    <div>
+                        <h3 style="color: #3b82f6;"><i class="fas fa-industry"></i> Ligne A - VTT Pro 26"</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
+                            <i class="fas fa-circle" style="color: #10b981; font-size: 10px;"></i> Active | 
+                            Complétés: 18/25 vélos
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="color: #3b82f6;">72%</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px;">progression</p>
+                    </div>
+                </div>
+                <div class="line-progress">
+                    <div class="line-progress-fill" style="width: 72%; background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);"></div>
+                </div>
+                <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary);">
+                    <span><i class="fas fa-clock"></i> Temps restant: 1.5 jours</span>
+                    <span><i class="fas fa-users"></i> 6 opérateurs</span>
+                </div>
+            </div>
+
+            <div class="line-card">
+                <div class="line-header">
+                    <div>
+                        <h3 style="color: #10b981;"><i class="fas fa-industry"></i> Ligne B - Vélo Route Performance</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
+                            <i class="fas fa-circle" style="color: #10b981; font-size: 10px;"></i> Active | 
+                            Complétés: 14/20 vélos
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="color: #10b981;">70%</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px;">progression</p>
+                    </div>
+                </div>
+                <div class="line-progress">
+                    <div class="line-progress-fill" style="width: 70%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);"></div>
+                </div>
+                <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary);">
+                    <span><i class="fas fa-clock"></i> Temps restant: 1.5 jours</span>
+                    <span><i class="fas fa-users"></i> 5 opérateurs</span>
+                </div>
+            </div>
+
+            <div class="line-card">
+                <div class="line-header">
+                    <div>
+                        <h3 style="color: #f59e0b;"><i class="fas fa-industry"></i> Ligne C - Vélo Urbain Confort</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">
+                            <i class="fas fa-circle" style="color: #10b981; font-size: 10px;"></i> Active | 
+                            Complétés: 10/20 vélos
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h3 style="color: #f59e0b;">50%</h3>
+                        <p style="color: var(--text-secondary); font-size: 13px;">progression</p>
+                    </div>
+                </div>
+                <div class="line-progress">
+                    <div class="line-progress-fill" style="width: 50%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);"></div>
+                </div>
+                <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary);">
+                    <span><i class="fas fa-clock"></i> Temps restant: 2.5 jours</span>
+                    <span><i class="fas fa-users"></i> 5 opérateurs</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Planning -->
+        <div class="section-header">
+            <h2>Planning détaillé de la semaine</h2>
+            <p>Répartition jour par jour</p>
+        </div>
+
+        <div class="planning-container">
+            <div class="week-planning">
+                <div class="day-column">
+                    <div class="day-header">
+                        Lundi 4
+                    </div>
+                    <div class="day-content">
+                        <div class="production-item ligne-a">
+                            <strong>Ligne A</strong>
+                            <small>5 VTT Pro</small>
+                        </div>
+                        <div class="production-item ligne-b">
+                            <strong>Ligne B</strong>
+                            <small>4 Vélo Route</small>
+                        </div>
+                        <div class="production-item ligne-c">
+                            <strong>Ligne C</strong>
+                            <small>4 Vélo Urbain</small>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--primary-color);">
+                            Total: 13 vélos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">
+                        Mardi 5
+                    </div>
+                    <div class="day-content">
+                        <div class="production-item ligne-a">
+                            <strong>Ligne A</strong>
+                            <small>5 VTT Pro</small>
+                        </div>
+                        <div class="production-item ligne-b">
+                            <strong>Ligne B</strong>
+                            <small>4 Vélo Route</small>
+                        </div>
+                        <div class="production-item ligne-c">
+                            <strong>Ligne C</strong>
+                            <small>4 Vélo Urbain</small>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--primary-color);">
+                            Total: 13 vélos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">
+                        Mercredi 6
+                    </div>
+                    <div class="day-content">
+                        <div class="production-item ligne-a">
+                            <strong>Ligne A</strong>
+                            <small>5 VTT Pro</small>
+                        </div>
+                        <div class="production-item ligne-b">
+                            <strong>Ligne B</strong>
+                            <small>4 Vélo Route</small>
+                        </div>
+                        <div class="production-item ligne-c">
+                            <strong>Ligne C</strong>
+                            <small>4 Vélo Urbain</small>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--primary-color);">
+                            Total: 13 vélos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">
+                        Jeudi 7
+                    </div>
+                    <div class="day-content">
+                        <div class="production-item ligne-a">
+                            <strong>Ligne A</strong>
+                            <small>5 VTT Pro</small>
+                        </div>
+                        <div class="production-item ligne-b">
+                            <strong>Ligne B</strong>
+                            <small>4 Vélo Route</small>
+                        </div>
+                        <div class="production-item ligne-c">
+                            <strong>Ligne C</strong>
+                            <small>4 Vélo Urbain</small>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--primary-color);">
+                            Total: 13 vélos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-column">
+                    <div class="day-header">
+                        Vendredi 8
+                    </div>
+                    <div class="day-content">
+                        <div class="production-item ligne-a">
+                            <strong>Ligne A</strong>
+                            <small>5 VTT Pro</small>
+                        </div>
+                        <div class="production-item ligne-b">
+                            <strong>Ligne B</strong>
+                            <small>4 Vélo Route</small>
+                        </div>
+                        <div class="production-item ligne-c">
+                            <strong>Ligne C</strong>
+                            <small>4 Vélo Urbain</small>
+                        </div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); text-align: center; font-weight: 600; color: var(--primary-color);">
+                            Total: 13 vélos
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Summary Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Récapitulatif production</h2>
+                <div class="table-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ligne</th>
+                        <th>Modèle</th>
+                        <th>Planifié</th>
+                        <th>Complété</th>
+                        <th>En cours</th>
+                        <th>Reste</th>
+                        <th>Progression</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong style="color: #3b82f6;">Ligne A</strong></td>
+                        <td>VTT Pro 26"</td>
+                        <td>25</td>
+                        <td>18</td>
+                        <td>4</td>
+                        <td>3</td>
+                        <td>72%</td>
+                        <td><span class="status-badge success">En cours</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: #10b981;">Ligne B</strong></td>
+                        <td>Vélo Route Performance</td>
+                        <td>20</td>
+                        <td>14</td>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>70%</td>
+                        <td><span class="status-badge success">En cours</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong style="color: #f59e0b;">Ligne C</strong></td>
+                        <td>Vélo Urbain Confort</td>
+                        <td>20</td>
+                        <td>10</td>
+                        <td>4</td>
+                        <td>6</td>
+                        <td>50%</td>
+                        <td><span class="status-badge warning">En cours</span></td>
+                    </tr>
+                    <tr style="background: var(--light-bg); font-weight: bold;">
+                        <td colspan="2"><strong>TOTAL HEBDOMADAIRE</strong></td>
+                        <td>65</td>
+                        <td>42</td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>64.6%</td>
+                        <td><span class="status-badge info">92.8% capacité</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

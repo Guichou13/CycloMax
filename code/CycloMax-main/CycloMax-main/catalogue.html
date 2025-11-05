@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Vélos - ERP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .bike-detail-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .bike-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .bike-icon-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        .bike-info h2 {
+            margin-bottom: 8px;
+            font-size: 26px;
+        }
+        .bike-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .components-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .components-table th {
+            background-color: var(--light-bg);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        .components-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .component-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-building"></i>
+            <h2>Mon ERP</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="catalogue.html" class="nav-item active">
+                <i class="fas fa-bicycle"></i>
+                <span>Catalogue Vélos</span>
+            </a>
+            <a href="stock.html" class="nav-item">
+                <i class="fas fa-boxes"></i>
+                <span>Stock Pièces</span>
+            </a>
+            <a href="production.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Planning Fabrication</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-bicycle"></i> Catalogue Vélos</h1>
+                <p class="subtitle">Gérez vos modèles et leur composition</p>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher un modèle...">
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Modèles au catalogue</p>
+                    <span class="stat-change positive">Actif</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>12</h3>
+                    <p>Pièces par vélo (moyenne)</p>
+                    <span class="stat-change positive">Standard</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>267</h3>
+                    <p>Vélos produits ce mois</p>
+                    <span class="stat-change positive">+12.5%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-wrench"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>100%</h3>
+                    <p>Pièces disponibles</p>
+                    <span class="stat-change positive">Stock OK</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bike Model 1: VTT Pro -->
+        <div class="bike-detail-card">
+            <div class="bike-header">
+                <div class="bike-icon-large blue">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="bike-info">
+                    <h2>VTT Pro 26"</h2>
+                    <p>Vélo tout-terrain professionnel avec suspension complète - Référence: BIKE-001</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Composition du vélo</h3>
+            <table class="components-table">
+                <thead>
+                    <tr>
+                        <th>Pièce</th>
+                        <th>Référence</th>
+                        <th>Quantité</th>
+                        <th>Stock disponible</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-circle"></i></span> Cadre aluminium 26"</td>
+                        <td>CAD-VTT-001</td>
+                        <td>1</td>
+                        <td>45</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-compact-disc"></i></span> Roues 26" (paire)</td>
+                        <td>ROU-26-001</td>
+                        <td>2</td>
+                        <td>90</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-circle-notch"></i></span> Pneus VTT 26" (paire)</td>
+                        <td>PNE-VTT-001</td>
+                        <td>2</td>
+                        <td>156</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-hand-rock"></i></span> Freins à disque hydrauliques</td>
+                        <td>FRE-HYD-001</td>
+                        <td>2</td>
+                        <td>78</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-cog"></i></span> Dérailleur arrière Shimano</td>
+                        <td>DER-SHI-001</td>
+                        <td>1</td>
+                        <td>62</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-dharmachakra"></i></span> Chaîne 21 vitesses</td>
+                        <td>CHA-21V-001</td>
+                        <td>1</td>
+                        <td>124</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-bars"></i></span> Guidon ergonomique</td>
+                        <td>GUI-ERG-001</td>
+                        <td>1</td>
+                        <td>89</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-chair"></i></span> Selle confort sport</td>
+                        <td>SEL-SPO-001</td>
+                        <td>1</td>
+                        <td>134</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-minus"></i></span> Tige de selle réglable</td>
+                        <td>TIG-REG-001</td>
+                        <td>1</td>
+                        <td>98</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-arrows-alt-v"></i></span> Fourche suspension avant</td>
+                        <td>FOU-SUS-001</td>
+                        <td>1</td>
+                        <td>56</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-shoe-prints"></i></span> Pédales aluminium</td>
+                        <td>PED-ALU-001</td>
+                        <td>2</td>
+                        <td>178</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-lightbulb"></i></span> Éclairage LED (avant/arrière)</td>
+                        <td>ECL-LED-001</td>
+                        <td>1</td>
+                        <td>145</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bike Model 2: Vélo Route -->
+        <div class="bike-detail-card">
+            <div class="bike-header">
+                <div class="bike-icon-large green">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="bike-info">
+                    <h2>Vélo Route Performance</h2>
+                    <p>Vélo de route haute performance pour compétition - Référence: BIKE-002</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Composition du vélo</h3>
+            <table class="components-table">
+                <thead>
+                    <tr>
+                        <th>Pièce</th>
+                        <th>Référence</th>
+                        <th>Quantité</th>
+                        <th>Stock disponible</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-circle"></i></span> Cadre carbone route</td>
+                        <td>CAD-ROU-002</td>
+                        <td>1</td>
+                        <td>32</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-compact-disc"></i></span> Roues route 700c (paire)</td>
+                        <td>ROU-700-002</td>
+                        <td>2</td>
+                        <td>64</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-circle-notch"></i></span> Pneus route 700c (paire)</td>
+                        <td>PNE-ROU-002</td>
+                        <td>2</td>
+                        <td>128</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-hand-rock"></i></span> Freins route caliper</td>
+                        <td>FRE-CAL-002</td>
+                        <td>2</td>
+                        <td>54</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-cog"></i></span> Dérailleur Shimano 105</td>
+                        <td>DER-105-002</td>
+                        <td>1</td>
+                        <td>48</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-dharmachakra"></i></span> Chaîne 22 vitesses</td>
+                        <td>CHA-22V-002</td>
+                        <td>1</td>
+                        <td>96</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-bars"></i></span> Guidon route courbé</td>
+                        <td>GUI-COU-002</td>
+                        <td>1</td>
+                        <td>67</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-chair"></i></span> Selle racing carbone</td>
+                        <td>SEL-RAC-002</td>
+                        <td>1</td>
+                        <td>72</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-minus"></i></span> Tige de selle carbone</td>
+                        <td>TIG-CAR-002</td>
+                        <td>1</td>
+                        <td>58</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-arrows-alt-v"></i></span> Fourche carbone rigide</td>
+                        <td>FOU-CAR-002</td>
+                        <td>1</td>
+                        <td>41</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-shoe-prints"></i></span> Pédales route automatiques</td>
+                        <td>PED-AUT-002</td>
+                        <td>2</td>
+                        <td>82</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-lightbulb"></i></span> Éclairage LED compact</td>
+                        <td>ECL-COM-002</td>
+                        <td>1</td>
+                        <td>112</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bike Model 3: Vélo Urbain -->
+        <div class="bike-detail-card">
+            <div class="bike-header">
+                <div class="bike-icon-large orange">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="bike-info">
+                    <h2>Vélo Urbain Confort</h2>
+                    <p>Vélo de ville confortable avec porte-bagages - Référence: BIKE-003</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Composition du vélo</h3>
+            <table class="components-table">
+                <thead>
+                    <tr>
+                        <th>Pièce</th>
+                        <th>Référence</th>
+                        <th>Quantité</th>
+                        <th>Stock disponible</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-circle"></i></span> Cadre acier urbain</td>
+                        <td>CAD-URB-003</td>
+                        <td>1</td>
+                        <td>52</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-compact-disc"></i></span> Roues ville 28" (paire)</td>
+                        <td>ROU-28-003</td>
+                        <td>2</td>
+                        <td>104</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-circle-notch"></i></span> Pneus ville 28" (paire)</td>
+                        <td>PNE-VIL-003</td>
+                        <td>2</td>
+                        <td>178</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-hand-rock"></i></span> Freins V-brake</td>
+                        <td>FRE-VBR-003</td>
+                        <td>2</td>
+                        <td>124</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-cog"></i></span> Dérailleur ville 7 vitesses</td>
+                        <td>DER-VIL-003</td>
+                        <td>1</td>
+                        <td>86</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-dharmachakra"></i></span> Chaîne 7 vitesses</td>
+                        <td>CHA-7V-003</td>
+                        <td>1</td>
+                        <td>156</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-bars"></i></span> Guidon ville rehaussé</td>
+                        <td>GUI-VIL-003</td>
+                        <td>1</td>
+                        <td>94</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-chair"></i></span> Selle confort gel</td>
+                        <td>SEL-GEL-003</td>
+                        <td>1</td>
+                        <td>167</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon purple"><i class="fas fa-minus"></i></span> Tige de selle standard</td>
+                        <td>TIG-STD-003</td>
+                        <td>1</td>
+                        <td>142</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon red"><i class="fas fa-arrows-alt-v"></i></span> Fourche rigide acier</td>
+                        <td>FOU-ACI-003</td>
+                        <td>1</td>
+                        <td>78</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon blue"><i class="fas fa-shoe-prints"></i></span> Pédales plastique</td>
+                        <td>PED-PLA-003</td>
+                        <td>2</td>
+                        <td>234</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon green"><i class="fas fa-shopping-basket"></i></span> Panier avant + porte-bagages</td>
+                        <td>ACC-PAN-003</td>
+                        <td>1</td>
+                        <td>89</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="component-icon orange"><i class="fas fa-lightbulb"></i></span> Éclairage dynamo</td>
+                        <td>ECL-DYN-003</td>
+                        <td>1</td>
+                        <td>123</td>
+                        <td><span class="status-badge success">Disponible</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
