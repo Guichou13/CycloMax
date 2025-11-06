@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clients - ERP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-building"></i>
+            <h2>Mon ERP</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="clients.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </a>
+            <a href="catalogue.html" class="nav-item">
+                <i class="fas fa-book"></i>
+                <span>Catalogue</span>
+            </a>
+            <a href="stock.html" class="nav-item">
+                <i class="fas fa-boxes"></i>
+                <span>Stock</span>
+            </a>
+            <a href="production.html" class="nav-item">
+                <i class="fas fa-industry"></i>
+                <span>Production</span>
+            </a>
+            <a href="fournisseurs.html" class="nav-item">
+                <i class="fas fa-truck"></i>
+                <span>Fournisseurs</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-users"></i> Gestion des Clients</h1>
+                <p class="subtitle">Gérez vos clients et vos relations commerciales</p>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher un client...">
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>892</h3>
+                    <p>Total clients</p>
+                    <span class="stat-change positive">+15.3%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>724</h3>
+                    <p>Clients actifs</p>
+                    <span class="stat-change positive">+8.7%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>45</h3>
+                    <p>Devis en attente</p>
+                    <span class="stat-change positive">+12%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>2.4M €</h3>
+                    <p>CA total</p>
+                    <span class="stat-change positive">+22.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-line"></i> Évolution des clients</h3>
+                <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                    <i class="fas fa-chart-area" style="font-size: 80px; opacity: 0.3;"></i>
+                    <p style="margin-top: 20px;">Graphique d'évolution mensuelle</p>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-pie"></i> Répartition par catégorie</h3>
+                <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                    <i class="fas fa-chart-pie" style="font-size: 80px; opacity: 0.3;"></i>
+                    <p style="margin-top: 20px;">Distribution des clients par type</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Liste des clients</h2>
+                <div class="table-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-filter"></i> Filtrer
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nouveau client
+                    </button>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Ville</th>
+                        <th>Statut</th>
+                        <th>CA</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#C001</td>
+                        <td><strong>Entreprise ABC</strong></td>
+                        <td>contact@abc.fr</td>
+                        <td>01 23 45 67 89</td>
+                        <td>Paris</td>
+                        <td><span class="status-badge success">Actif</span></td>
+                        <td>125,500 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C002</td>
+                        <td><strong>Société XYZ</strong></td>
+                        <td>info@xyz.com</td>
+                        <td>01 98 76 54 32</td>
+                        <td>Lyon</td>
+                        <td><span class="status-badge success">Actif</span></td>
+                        <td>89,200 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C003</td>
+                        <td><strong>Tech Solutions Ltd</strong></td>
+                        <td>contact@techsol.fr</td>
+                        <td>02 34 56 78 90</td>
+                        <td>Marseille</td>
+                        <td><span class="status-badge warning">En attente</span></td>
+                        <td>45,800 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C004</td>
+                        <td><strong>Innovation Group</strong></td>
+                        <td>hello@innovation.fr</td>
+                        <td>03 45 67 89 01</td>
+                        <td>Toulouse</td>
+                        <td><span class="status-badge success">Actif</span></td>
+                        <td>198,750 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C005</td>
+                        <td><strong>Digital Services</strong></td>
+                        <td>contact@digital.fr</td>
+                        <td>04 56 78 90 12</td>
+                        <td>Nantes</td>
+                        <td><span class="status-badge danger">Inactif</span></td>
+                        <td>12,300 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C006</td>
+                        <td><strong>Global Trade Corp</strong></td>
+                        <td>info@globaltrade.fr</td>
+                        <td>05 67 89 01 23</td>
+                        <td>Bordeaux</td>
+                        <td><span class="status-badge success">Actif</span></td>
+                        <td>234,900 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C007</td>
+                        <td><strong>Startup Innovante</strong></td>
+                        <td>team@startup.io</td>
+                        <td>06 78 90 12 34</td>
+                        <td>Lille</td>
+                        <td><span class="status-badge info">Nouveau</span></td>
+                        <td>5,200 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#C008</td>
+                        <td><strong>Commerce Plus</strong></td>
+                        <td>contact@commerceplus.fr</td>
+                        <td>07 89 01 23 45</td>
+                        <td>Nice</td>
+                        <td><span class="status-badge success">Actif</span></td>
+                        <td>156,400 €</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

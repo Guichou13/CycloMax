@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-building"></i>
+            <h2>Mon ERP</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <!-- <a href="clients.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Clients</span>
+            </a> -->
+            <a href="catalogue.html" class="nav-item">
+                <i class="fas fa-bicycle"></i>
+                <span>Catalogue Vélos</span>
+            </a>
+            <a href="stock.html" class="nav-item">
+                <i class="fas fa-boxes"></i>
+                <span>Stock Pièces</span>
+            </a>
+            <a href="production.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Planning Fabrication</span>
+            </a>
+            <a href="planning.html" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Planning Postes</span>
+            </a>
+            <!-- <a href="fournisseurs.html" class="nav-item">
+                <i class="fas fa-truck"></i>
+                <span>Fournisseurs</span>
+            </a> -->
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Tableau de bord</h1>
+                <p class="subtitle">Vue d'ensemble de votre entreprise</p>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher...">
+                </div>
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>267</h3>
+                    <p>Vélos produits ce mois</p>
+                    <span class="stat-change positive">+12.5%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>2,345</h3>
+                    <p>Pièces en stock</p>
+                    <span class="stat-change positive">+8.2%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>65</h3>
+                    <p>Vélos planifiés cette semaine</p>
+                    <span class="stat-change positive">92.8%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Lignes de production</p>
+                    <span class="stat-change positive">100% actives</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modules Grid -->
+        <div class="section-header">
+            <h2>Modules</h2>
+            <p>Accédez rapidement à vos modules</p>
+        </div>
+
+        <div class="modules-grid">
+            <a href="catalogue.html" class="module-card">
+                <div class="module-icon blue">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <h3>Catalogue Vélos</h3>
+                <p>Gérez vos modèles de vélos</p>
+                <div class="module-stats">
+                    <span><i class="fas fa-bicycle"></i> 3 modèles</span>
+                    <span><i class="fas fa-cogs"></i> Composition détaillée</span>
+                </div>
+            </a>
+
+            <a href="stock.html" class="module-card">
+                <div class="module-icon green">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <h3>Stock Pièces</h3>
+                <p>Suivez vos pièces détachées</p>
+                <div class="module-stats">
+                    <span><i class="fas fa-warehouse"></i> 2,345 pièces</span>
+                    <span><i class="fas fa-exclamation-triangle"></i> 5 alertes</span>
+                </div>
+            </a>
+
+            <a href="production.html" class="module-card">
+                <div class="module-icon orange">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>Planning Fabrication</h3>
+                <p>Planifiez votre production</p>
+                <div class="module-stats">
+                    <span><i class="fas fa-industry"></i> 3 lignes actives</span>
+                    <span><i class="fas fa-chart-line"></i> 70 vélos/semaine max</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="section-header">
+            <h2>Activité récente</h2>
+        </div>
+
+        <div class="activity-container">
+            <div class="activity-item">
+                <div class="activity-icon blue">
+                    <i class="fas fa-bicycle"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>Production Ligne A</h4>
+                    <p>25 VTT Pro assemblés - Objectif hebdomadaire atteint</p>
+                </div>
+                <div class="activity-time">Il y a 15 min</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon green">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>Réception stock</h4>
+                    <p>100 pneus 26" et 50 dérailleurs reçus</p>
+                </div>
+                <div class="activity-time">Il y a 1 heure</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon orange">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>Alerte stock</h4>
+                    <p>Freins à disque - Stock faible (8 unités restantes)</p>
+                </div>
+                <div class="activity-time">Il y a 2 heures</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon purple">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>Planning mis à jour</h4>
+                    <p>Planification semaine prochaine : 65 vélos programmés</p>
+                </div>
+                <div class="activity-time">Il y a 3 heures</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
