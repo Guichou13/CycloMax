@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Production - ERP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .planning-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .manager-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav-btn:hover {
+            background: #6d28d9;
+        }
+
+        .calendar-nav-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .calendar-info {
+            text-align: center;
+        }
+
+        .calendar-info h2 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        .calendar-info p {
+            margin: 5px 0 0 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .workstation-container {
+            margin-bottom: 30px;
+        }
+
+        .workstation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .workstation-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .workstation-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .workstation-actions button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .workstation-actions button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .workstation-days {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .day-column {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+        }
+
+        .day-header {
+            text-align: center;
+            padding: 10px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .day-name {
+            font-size: 14px;
+            display: block;
+        }
+
+        .day-date {
+            font-size: 12px;
+            opacity: 0.9;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .day-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slot {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slot:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .slot.empty {
+            background: #f8fafc;
+            border-style: dashed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .slot.vtt-pro {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-color: #3b82f6;
+        }
+
+        .slot.velo-route {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+        }
+
+        .slot.velo-urbain {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+        }
+
+        .slot-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .slot-model {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .slot.vtt-pro .slot-model {
+            color: #1e40af;
+        }
+
+        .slot.velo-route .slot-model {
+            color: #065f46;
+        }
+
+        .slot.velo-urbain .slot-model {
+            color: #92400e;
+        }
+
+        .slot-duration {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--light-bg);
+            color: var(--text-primary);
+        }
+
+        .pieces-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .piece-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .piece-item:hover {
+            background: #e2e8f0;
+            transform: translateX(5px);
+        }
+
+        .piece-info {
+            flex: 1;
+        }
+
+        .piece-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .piece-ref {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .piece-quantity {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .piece-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .piece-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .time-edit-section {
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .time-edit-section h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+        }
+
+        .time-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .time-input-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .validation-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .validation-section h3 {
+            margin: 0 0 10px 0;
+            color: #92400e;
+        }
+
+        .validation-section p {
+            margin: 0 0 15px 0;
+            color: #92400e;
+            font-size: 14px;
+        }
+
+        .validation-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .validation-btn:hover {
+            background: #059669;
+        }
+
+        .validation-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .add-workstation-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .add-workstation-btn:hover {
+            background: #6d28d9;
+        }
+
+        .week-selector {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-building"></i>
+            <h2>Mon ERP</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="catalogue.html" class="nav-item">
+                <i class="fas fa-bicycle"></i>
+                <span>Catalogue Vélos</span>
+            </a>
+            <a href="stock.html" class="nav-item">
+                <i class="fas fa-boxes"></i>
+                <span>Stock Pièces</span>
+            </a>
+            <a href="production.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Planning Fabrication</span>
+            </a>
+            <a href="planning.html" class="nav-item active">
+                <i class="fas fa-tasks"></i>
+                <span>Planning Postes</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="userRole">Manager</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-tasks"></i> Planning des Postes de Travail</h1>
+                <p class="subtitle">Gestion des postes de travail et planification de l'assemblage</p>
+            </div>
+            <div class="header-right">
+                <div class="view-toggle">
+                    <button class="view-btn" onclick="setView('worker')">Vue Opérateur</button>
+                    <button class="view-btn active" onclick="setView('manager')">Vue Manager</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Calendar Navigation -->
+        <div class="calendar-navigation">
+            <button class="calendar-nav-btn" onclick="changeWeek(-1)">
+                <i class="fas fa-chevron-left"></i> Semaine précédente
+            </button>
+            <div class="calendar-info">
+                <h2 id="weekRange">Semaine du ... au ...</h2>
+                <p id="weekYear">Année</p>
+            </div>
+            <button class="calendar-nav-btn" onclick="changeWeek(1)">
+                Semaine suivante <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Validation Section (only on Friday, only for manager) -->
+        <div id="validationSection" class="validation-section" style="display: none;">
+            <h3><i class="fas fa-calendar-check"></i> Validation du planning de la semaine prochaine</h3>
+            <p>Le vendredi, vous devez valider le planning automatique de la semaine prochaine avant qu'il ne soit visible aux opérateurs.</p>
+            <button class="validation-btn" onclick="validateNextWeek()">
+                <i class="fas fa-check"></i> Valider le planning de la semaine prochaine
+            </button>
+        </div>
+
+        <!-- Manager Controls -->
+        <div id="managerControls" class="manager-controls">
+            <button class="add-workstation-btn" onclick="addWorkstation()">
+                <i class="fas fa-plus"></i> Ajouter un poste
+            </button>
+            <span style="flex: 1;"></span>
+            <button class="btn btn-secondary" onclick="generateNextWeekPlanning()">
+                <i class="fas fa-magic"></i> Générer planning semaine prochaine
+            </button>
+        </div>
+
+        <!-- Workstations Container -->
+        <div id="workstationsContainer"></div>
+
+        <!-- Modal for Piece Details -->
+        <div id="pieceModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Pièces nécessaires</h2>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div id="modalBody">
+                    <!-- Content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Bike models data
+        const bikeModels = {
+            'vtt-pro': {
+                name: 'VTT Pro 26"',
+                color: 'blue',
+                class: 'vtt-pro',
+                pieces: [
+                    { name: 'Cadre aluminium 26"', ref: 'CAD-VTT-001', qty: 1 },
+                    { name: 'Roues 26" (paire)', ref: 'ROU-26-001', qty: 2 },
+                    { name: 'Pneus VTT 26" (paire)', ref: 'PNE-VTT-001', qty: 2 },
+                    { name: 'Freins à disque hydrauliques', ref: 'FRE-HYD-001', qty: 2 },
+                    { name: 'Dérailleur arrière Shimano', ref: 'DER-SHI-001', qty: 1 },
+                    { name: 'Chaîne 21 vitesses', ref: 'CHA-21V-001', qty: 1 },
+                    { name: 'Guidon ergonomique', ref: 'GUI-ERG-001', qty: 1 },
+                    { name: 'Selle confort sport', ref: 'SEL-SPO-001', qty: 1 },
+                    { name: 'Tige de selle réglable', ref: 'TIG-REG-001', qty: 1 },
+                    { name: 'Fourche suspension avant', ref: 'FOU-SUS-001', qty: 1 },
+                    { name: 'Pédales aluminium', ref: 'PED-ALU-001', qty: 2 },
+                    { name: 'Éclairage LED (avant/arrière)', ref: 'ECL-LED-001', qty: 1 }
+                ]
+            },
+            'velo-route': {
+                name: 'Vélo Route Performance',
+                color: 'green',
+                class: 'velo-route',
+                pieces: [
+                    { name: 'Cadre carbone route', ref: 'CAD-ROU-002', qty: 1 },
+                    { name: 'Roues route 700c (paire)', ref: 'ROU-700-002', qty: 2 },
+                    { name: 'Pneus route 700c (paire)', ref: 'PNE-ROU-002', qty: 2 },
+                    { name: 'Freins route caliper', ref: 'FRE-CAL-002', qty: 2 },
+                    { name: 'Dérailleur Shimano 105', ref: 'DER-105-002', qty: 1 },
+                    { name: 'Chaîne 22 vitesses', ref: 'CHA-22V-002', qty: 1 },
+                    { name: 'Guidon route courbé', ref: 'GUI-COU-002', qty: 1 },
+                    { name: 'Selle racing carbone', ref: 'SEL-RAC-002', qty: 1 },
+                    { name: 'Tige de selle carbone', ref: 'TIG-CAR-002', qty: 1 },
+                    { name: 'Fourche carbone rigide', ref: 'FOU-CAR-002', qty: 1 },
+                    { name: 'Pédales route automatiques', ref: 'PED-AUT-002', qty: 2 },
+                    { name: 'Éclairage LED compact', ref: 'ECL-COM-002', qty: 1 }
+                ]
+            },
+            'velo-urbain': {
+                name: 'Vélo Urbain Confort',
+                color: 'orange',
+                class: 'velo-urbain',
+                pieces: [
+                    { name: 'Cadre acier urbain', ref: 'CAD-URB-003', qty: 1 },
+                    { name: 'Roues ville 28" (paire)', ref: 'ROU-28-003', qty: 2 },
+                    { name: 'Pneus ville 28" (paire)', ref: 'PNE-VIL-003', qty: 2 },
+                    { name: 'Freins V-brake', ref: 'FRE-VBR-003', qty: 2 },
+                    { name: 'Dérailleur ville 7 vitesses', ref: 'DER-VIL-003', qty: 1 },
+                    { name: 'Chaîne 7 vitesses', ref: 'CHA-7V-003', qty: 1 },
+                    { name: 'Guidon ville rehaussé', ref: 'GUI-VIL-003', qty: 1 },
+                    { name: 'Selle confort gel', ref: 'SEL-GEL-003', qty: 1 },
+                    { name: 'Tige de selle standard', ref: 'TIG-STD-003', qty: 1 },
+                    { name: 'Fourche rigide acier', ref: 'FOU-ACI-003', qty: 1 },
+                    { name: 'Pédales plastique', ref: 'PED-PLA-003', qty: 2 },
+                    { name: 'Panier avant + porte-bagages', ref: 'ACC-PAN-003', qty: 1 },
+                    { name: 'Éclairage dynamo', ref: 'ECL-DYN-003', qty: 1 }
+                ]
+            }
+        };
+
+        // Planning data storage - now with date-based structure
+        let planningData = {};
+
+        // Current week offset (0 = current week, -1 = last week, 1 = next week, etc.)
+        let currentWeekOffset = 0;
+        let currentView = 'manager';
+        let workstationCount = 3;
+        let currentWeekStartDate = null;
+        let nextWeekValidated = false;
+
+        // Get Monday of a given week
+        function getMondayOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+            return new Date(d.setDate(diff));
+        }
+
+        // Get week dates
+        function getWeekDates(weekOffset) {
+            const today = new Date();
+            const currentMonday = getMondayOfWeek(today);
+            const weekStart = new Date(currentMonday);
+            weekStart.setDate(weekStart.getDate() + (weekOffset * 7));
+            
+            const dates = [];
+            for (let i = 0; i < 5; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                dates.push(date);
+            }
+            return dates;
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            return {
+                dayName: days[date.getDay()],
+                day: date.getDate(),
+                month: months[date.getMonth()],
+                year: date.getFullYear()
+            };
+        }
+
+        // Check if today is Friday
+        function isFriday() {
+            const today = new Date();
+            return today.getDay() === 5; // 5 = Friday
+        }
+
+        // Check if current week is next week (weekOffset = 1)
+        function isNextWeek() {
+            return currentWeekOffset === 1;
+        }
+
+        // Initialize
+        function init() {
+            loadPlanningData();
+            currentWeekStartDate = getMondayOfWeek(new Date());
+            loadValidationStatus();
+            updateCalendarDisplay();
+            checkValidationButton();
+            renderWorkstations();
+        }
+
+        // Load planning data from localStorage
+        function loadPlanningData() {
+            const saved = localStorage.getItem('planningData');
+            if (saved) {
+                planningData = JSON.parse(saved);
+            } else {
+                planningData = {};
+            }
+        }
+
+        // Load validation status
+        function loadValidationStatus() {
+            const saved = localStorage.getItem('nextWeekValidated');
+            nextWeekValidated = saved === 'true';
+        }
+
+        // Save validation status
+        function saveValidationStatus() {
+            localStorage.setItem('nextWeekValidated', nextWeekValidated.toString());
+        }
+
+        // Get week key for storage
+        function getWeekKey(weekOffset) {
+            const dates = getWeekDates(weekOffset);
+            const monday = dates[0];
+            return `${monday.getFullYear()}-W${getWeekNumber(monday)}`;
+        }
+
+        // Get week number
+        function getWeekNumber(date) {
+            const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const dayNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        // Update calendar display
+        function updateCalendarDisplay() {
+            const dates = getWeekDates(currentWeekOffset);
+            const firstDate = formatDate(dates[0]);
+            const lastDate = formatDate(dates[4]);
+            
+            document.getElementById('weekRange').textContent = 
+                `Semaine du ${firstDate.day} ${firstDate.month} au ${lastDate.day} ${lastDate.month}`;
+            document.getElementById('weekYear').textContent = firstDate.year;
+        }
+
+        // Check if validation button should be shown
+        function checkValidationButton() {
+            const validationSection = document.getElementById('validationSection');
+            if (currentView === 'manager' && isFriday() && isNextWeek() && !nextWeekValidated) {
+                validationSection.style.display = 'block';
+            } else {
+                validationSection.style.display = 'none';
+            }
+        }
+
+        // Change week
+        function changeWeek(offset) {
+            currentWeekOffset += offset;
+            updateCalendarDisplay();
+            renderWorkstations();
+        }
+
+        // Save planning data to localStorage
+        function savePlanningData() {
+            localStorage.setItem('planningData', JSON.stringify(planningData));
+        }
+
+        // Render all workstations
+        function renderWorkstations() {
+            const container = document.getElementById('workstationsContainer');
+            container.innerHTML = '';
+            
+            const weekKey = getWeekKey(currentWeekOffset);
+            const weekData = planningData[weekKey] || {};
+            const count = workstationCount;
+            
+            for (let i = 1; i <= count; i++) {
+                const key = `workstation-${i}`;
+                container.appendChild(createWorkstationElement(i, weekData[key] || {}, weekKey));
+            }
+        }
+
+        // Create workstation element with 5 days
+        function createWorkstationElement(id, weekData, weekKey) {
+            const container = document.createElement('div');
+            container.className = 'workstation-container';
+            container.id = `workstation-${id}`;
+
+            const dates = getWeekDates(currentWeekOffset);
+            const slotsPerDay = 5; // 5 slots of 1.5h = 7.5h per day
+            const startHour = 8;
+
+            const daysHtml = dates.map((date, dayIndex) => {
+                const dayKey = `day-${dayIndex}`;
+                const daySlots = weekData[dayKey] || Array(slotsPerDay).fill(null);
+                const formatted = formatDate(date);
+
+                const slotsHtml = daySlots.map((slot, slotIndex) => {
+                    if (!slot || slot === null) {
+                        const defaultStart = startHour + slotIndex * 1.5;
+                        const defaultEnd = startHour + (slotIndex + 1) * 1.5;
+                        return `
+                            <div class="slot empty" onclick="openSlotModal(${id}, ${dayIndex}, ${slotIndex}, '${weekKey}')">
+                                <i class="fas fa-plus"></i>
+                                <div style="font-size: 10px; margin-top: 3px;">Libre</div>
+                                <div class="slot-duration">${formatTime(defaultStart)} - ${formatTime(defaultEnd)}</div>
+                            </div>
+                        `;
+                    }
+                    const model = bikeModels[slot.model];
+                    return `
+                        <div class="slot ${model.class}" onclick="openSlotModal(${id}, ${dayIndex}, ${slotIndex}, '${weekKey}')">
+                            <div class="slot-time">${slot.time || `${formatTime(startHour + slotIndex * 1.5)} - ${formatTime(startHour + (slotIndex + 1) * 1.5)}`}</div>
+                            <div class="slot-model">${model.name}</div>
+                            <div class="slot-duration">1.5h</div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="day-column">
+                        <div class="day-header">
+                            <span class="day-name">${formatted.dayName}</span>
+                            <span class="day-date">${formatted.day} ${formatted.month}</span>
+                        </div>
+                        <div class="day-slots">
+                            ${slotsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="workstation-header">
+                    <h3><i class="fas fa-industry"></i> Poste de Travail ${id}</h3>
+                    ${currentView === 'manager' ? `
+                        <div class="workstation-actions">
+                            <button onclick="removeWorkstation(${id}, '${weekKey}')" title="Supprimer">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="workstation-days">
+                    ${daysHtml}
+                </div>
+            `;
+
+            return container;
+        }
+
+        // Format time
+        function formatTime(hours) {
+            const h = Math.floor(hours);
+            const m = Math.round((hours - h) * 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+        }
+
+        // Parse time string to hours
+        function parseTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours + minutes / 60;
+        }
+
+        // Open slot modal
+        function openSlotModal(workstationId, dayIndex, slotIndex, weekKey) {
+            // Workers can view but not modify next week if not validated
+            if (currentView === 'worker' && currentWeekOffset === 1 && !nextWeekValidated) {
+                alert('La semaine prochaine n\'a pas encore été validée par le manager.');
+                return;
+            }
+
+            const key = `workstation-${workstationId}`;
+            if (!planningData[weekKey]) {
+                planningData[weekKey] = {};
+            }
+            if (!planningData[weekKey][key]) {
+                planningData[weekKey][key] = {};
+            }
+            const dayKey = `day-${dayIndex}`;
+            const daySlots = planningData[weekKey][key][dayKey] || Array(5).fill(null);
+            const slot = daySlots[slotIndex];
+
+            const modal = document.getElementById('pieceModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            if (!slot || slot === null) {
+                // Empty slot - show model selection for manager
+                if (currentView === 'manager') {
+                    modalTitle.textContent = 'Assigner un modèle';
+                    modalBody.innerHTML = `
+                        <p style="margin-bottom: 20px;">Sélectionnez un modèle de vélo pour ce créneau :</p>
+                        <div style="display: grid; gap: 10px;">
+                            ${Object.keys(bikeModels).map(modelKey => {
+                                const model = bikeModels[modelKey];
+                                return `
+                                    <button class="btn btn-primary" style="text-align: left; padding: 15px; background: linear-gradient(135deg, var(--light-bg) 0%, white 100%); color: var(--text-primary); border: 2px solid var(--border-color);" onclick="assignModel(${workstationId}, ${dayIndex}, ${slotIndex}, '${modelKey}', '${weekKey}')">
+                                        <strong>${model.name}</strong>
+                                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">${model.pieces.length} pièces nécessaires</div>
+                                    </button>
+                                `;
+                            }).join('')}
+                            <button class="btn btn-secondary" onclick="closeModal()" style="margin-top: 10px;">Annuler</button>
+                        </div>
+                    `;
+                } else {
+                    return;
+                }
+            } else {
+                // Show pieces for this slot
+                const model = bikeModels[slot.model];
+                modalTitle.textContent = `${model.name} - Modifier`;
+                
+                const startHour = 8;
+                const defaultStart = startHour + slotIndex * 1.5;
+                const defaultEnd = startHour + (slotIndex + 1) * 1.5;
+                
+                // Parse current time if exists
+                let currentStart = defaultStart;
+                let currentEnd = defaultEnd;
+                if (slot.time) {
+                    const [start, end] = slot.time.split(' - ');
+                    currentStart = parseTime(start);
+                    currentEnd = parseTime(end);
+                }
+
+                modalBody.innerHTML = `
+                    ${currentView === 'manager' ? `
+                        <div class="time-edit-section">
+                            <h3><i class="fas fa-clock"></i> Modifier les heures</h3>
+                            <div class="time-input-group">
+                                <div>
+                                    <label>Heure de début</label>
+                                    <input type="time" id="editStartTime" value="${formatTime(currentStart)}" step="900">
+                                </div>
+                                <div>
+                                    <label>Heure de fin</label>
+                                    <input type="time" id="editEndTime" value="${formatTime(currentEnd)}" step="900">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="saveTimeEdit(${workstationId}, ${dayIndex}, ${slotIndex}, '${weekKey}')" style="margin-top: 10px; width: 100%;">
+                                <i class="fas fa-save"></i> Enregistrer les heures
+                            </button>
+                        </div>
+                    ` : ''}
+                    <div class="pieces-list">
+                        <h3 style="margin-bottom: 15px;"><i class="fas fa-list"></i> Pièces nécessaires</h3>
+                        ${model.pieces.map(piece => `
+                            <div class="piece-item">
+                                <div class="piece-info">
+                                    <div class="piece-name">${piece.name}</div>
+                                    <div class="piece-ref">${piece.ref}</div>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <span class="piece-quantity">x${piece.qty}</span>
+                                    <a href="stock.html#${piece.ref}" class="piece-link" onclick="closeModal()">
+                                        <i class="fas fa-boxes"></i> Voir stock
+                                    </a>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${currentView === 'manager' ? `
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border-color);">
+                            <button class="btn btn-secondary" onclick="removeSlot(${workstationId}, ${dayIndex}, ${slotIndex}, '${weekKey}')" style="width: 100%;">
+                                <i class="fas fa-trash"></i> Libérer ce créneau
+                            </button>
+                        </div>
+                    ` : ''}
+                `;
+            }
+
+            modal.classList.add('active');
+        }
+
+        // Assign model to slot
+        function assignModel(workstationId, dayIndex, slotIndex, modelKey, weekKey) {
+            const key = `workstation-${workstationId}`;
+            if (!planningData[weekKey][key]) {
+                planningData[weekKey][key] = {};
+            }
+            const dayKey = `day-${dayIndex}`;
+            if (!planningData[weekKey][key][dayKey]) {
+                planningData[weekKey][key][dayKey] = Array(5).fill(null);
+            }
+            
+            const startHour = 8;
+            const defaultStart = startHour + slotIndex * 1.5;
+            const defaultEnd = startHour + (slotIndex + 1) * 1.5;
+            
+            planningData[weekKey][key][dayKey][slotIndex] = {
+                model: modelKey,
+                time: `${formatTime(defaultStart)} - ${formatTime(defaultEnd)}`
+            };
+            
+            savePlanningData();
+            renderWorkstations();
+            closeModal();
+        }
+
+        // Save time edit
+        function saveTimeEdit(workstationId, dayIndex, slotIndex, weekKey) {
+            const startTime = document.getElementById('editStartTime').value;
+            const endTime = document.getElementById('editEndTime').value;
+            
+            if (!startTime || !endTime) {
+                alert('Veuillez remplir les heures de début et de fin.');
+                return;
+            }
+
+            const start = parseTime(startTime);
+            const end = parseTime(endTime);
+            
+            if (end <= start) {
+                alert('L\'heure de fin doit être supérieure à l\'heure de début.');
+                return;
+            }
+
+            const key = `workstation-${workstationId}`;
+            const dayKey = `day-${dayIndex}`;
+            if (planningData[weekKey][key][dayKey][slotIndex]) {
+                planningData[weekKey][key][dayKey][slotIndex].time = `${startTime} - ${endTime}`;
+                savePlanningData();
+                renderWorkstations();
+                closeModal();
+            }
+        }
+
+        // Remove slot assignment
+        function removeSlot(workstationId, dayIndex, slotIndex, weekKey) {
+            const key = `workstation-${workstationId}`;
+            const dayKey = `day-${dayIndex}`;
+            if (planningData[weekKey][key][dayKey]) {
+                planningData[weekKey][key][dayKey][slotIndex] = null;
+                savePlanningData();
+                renderWorkstations();
+                closeModal();
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('pieceModal').classList.remove('active');
+        }
+
+        // Set view (worker/manager)
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('managerControls').style.display = view === 'manager' ? 'flex' : 'none';
+            document.getElementById('userRole').textContent = view === 'manager' ? 'Manager' : 'Opérateur';
+            
+            checkValidationButton();
+            renderWorkstations();
+        }
+
+        // Add workstation
+        function addWorkstation() {
+            workstationCount++;
+            savePlanningData();
+            renderWorkstations();
+        }
+
+        // Remove workstation
+        function removeWorkstation(id, weekKey) {
+            if (confirm(`Supprimer le poste de travail ${id} ?`)) {
+                const key = `workstation-${id}`;
+                if (planningData[weekKey] && planningData[weekKey][key]) {
+                    delete planningData[weekKey][key];
+                }
+                savePlanningData();
+                renderWorkstations();
+            }
+        }
+
+        // Generate next week planning automatically
+        function generateNextWeekPlanning() {
+            if (confirm('Générer automatiquement le planning pour la semaine prochaine ?')) {
+                const nextWeekKey = getWeekKey(1);
+                if (!planningData[nextWeekKey]) {
+                    planningData[nextWeekKey] = {};
+                }
+                
+                const slotsPerDay = 5;
+                const models = ['vtt-pro', 'velo-route', 'velo-urbain'];
+                
+                for (let ws = 1; ws <= workstationCount; ws++) {
+                    const key = `workstation-${ws}`;
+                    if (!planningData[nextWeekKey][key]) {
+                        planningData[nextWeekKey][key] = {};
+                    }
+                    
+                    for (let day = 0; day < 5; day++) {
+                        const dayKey = `day-${day}`;
+                        if (!planningData[nextWeekKey][key][dayKey]) {
+                            planningData[nextWeekKey][key][dayKey] = [];
+                        }
+                        
+                        for (let slot = 0; slot < slotsPerDay; slot++) {
+                            const modelIndex = (ws - 1 + day + slot) % models.length;
+                            const startHour = 8;
+                            const defaultStart = startHour + slot * 1.5;
+                            const defaultEnd = startHour + (slot + 1) * 1.5;
+                            
+                            planningData[nextWeekKey][key][dayKey][slot] = {
+                                model: models[modelIndex],
+                                time: `${formatTime(defaultStart)} - ${formatTime(defaultEnd)}`
+                            };
+                        }
+                    }
+                }
+                
+                savePlanningData();
+                nextWeekValidated = false;
+                saveValidationStatus();
+                alert('Planning de la semaine prochaine généré avec succès !');
+            }
+        }
+
+        // Validate next week planning
+        function validateNextWeek() {
+            if (confirm('Valider le planning de la semaine prochaine ? Il deviendra visible aux opérateurs.')) {
+                nextWeekValidated = true;
+                saveValidationStatus();
+                checkValidationButton();
+                alert('Planning validé avec succès ! Il est maintenant visible aux opérateurs.');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('pieceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
